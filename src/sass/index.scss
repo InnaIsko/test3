@@ -1,2 +1,6 @@
-@import './common';
-@import './example';
+@import '../sass/utils/variables';
+@import '../sass/utils/common';
+@import '../sass/utils/base';
+@import './components/_headers';
+@import './components/filmoteka';
+@import './components/_footer';

@@ -1,0 +1,44 @@
+.footer {
+  padding: 30 0;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: $bgc-secondary;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media screen and (min-width: $middle-width) {
+    max-width: $middle-width;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+  }
+  @media screen and (min-width: $max-width) {
+    max-width: $max-width;
+  }
+
+  &__simbol {
+    font-size: 14px;
+
+    font-weight: $font-weight-secondary;
+    margin-bottom: 10px;
+    color: $color-secondary;
+  }
+  &__text {
+    display: flex;
+    justify-content: center;
+    color: $color-secondary;
+    font-size: 14px;
+    @media screen and (min-width: $middle-width) {
+      margin-left: 5px;
+    }
+  }
+  &__img {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  &__span {
+    color: $color-secondary;
+    font-size: 14px;
+  }
+}

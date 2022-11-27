@@ -1,0 +1,22 @@
+.movies {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__item {
+    height: 443px;
+    padding: 20px 0;
+  }
+
+  &__img {
+  }
+
+  &__title {
+  }
+
+  &__text {
+  }
+}
