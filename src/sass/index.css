@@ -49,20 +49,19 @@ address {
 
 /* Контейнер */
 .container {
-  max-width: 320px;
-  width: 100%;
+  width: 320px;
   margin: 0 auto;
   padding: 0 20px;
   margin-left: auto;
   margin-right: auto;
 }
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 768px) and (max-width: 1279px) {
   .container {
-    min-width: 768px;
+    width: 768px;
     padding: 0 32px;
   }
 }
-@media screen and (min-width: max-width) {
+@media screen and (min-width: 1280px) {
   .container {
     width: 1280px;
     padding: 0 32px;
@@ -80,6 +79,7 @@ header {
   background-image: url(../images/haeder/header-background-320.jpg);
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
 }
 @media screen and (min-width: 320px) and (max-width: 767px) {
   header {
@@ -97,6 +97,7 @@ header {
     max-width: 768px;
     height: 216px;
     padding: 40px 32px 81px 32px;
+    margin-bottom: 59px;
     background-image: url(../images/haeder/header-background-768.jpg);
     background-size: 768px 216px;
   }
@@ -110,6 +111,7 @@ header {
   header {
     max-width: 1280px;
     height: 216px;
+    margin-bottom: 60px;
     padding: 40px 32px 80px 32px;
     background-image: url(../images/haeder/header-background-1280.jpg);
     background-size: 1280px 216px;
@@ -249,14 +251,68 @@ header {
 
 .movies__list {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+}
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .movies__list {
+    margin: -16px;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .movies__list {
+    margin: -8px;
+  }
 }
 .movies__item {
-  height: 443px;
-  padding: 20px 0;
+  width: 100%;
 }
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .movies__item {
+    width: calc((100% - 64px) / 2);
+    margin: 16px;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .movies__item {
+    width: calc((100% - 96px) / 3);
+    margin: 16px;
+  }
+}
+.movies__img {
+  height: 398px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .movies__img {
+    margin-bottom: 8px;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .movies__img {
+    margin-bottom: 12px;
+  }
+}
+.movies__title {
+  font-size: 12px;
+  font-weight: 500;
+}
+@media screen and (min-width: 1280px) {
+  .movies__title {
+    font-size: 20px;
+  }
+}
+.movies__text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #ff6b08;
+}
+@media screen and (min-width: 1280px) {
+  .movies__text {
+    font-size: 20px;
+  }
+}
+
 .footer {
   padding: 30 0;
   max-width: 320px;

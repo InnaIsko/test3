@@ -3,6 +3,7 @@ header {
   background-image: url(../images/haeder/header-background-320.jpg);
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
 
   @media screen and (min-width: $min-width) and (max-width: 767px) {
     max-width: $min-width;
@@ -19,6 +20,7 @@ header {
     max-width: $middle-width;
     height: 216px;
     padding: 40px 32px 81px 32px;
+    margin-bottom: 59px;
     background-image: url(../images/haeder/header-background-768.jpg);
     background-size: 768px 216px;
 
@@ -31,6 +33,7 @@ header {
   @media screen and (min-width: $max-width) {
     max-width: 1280px;
     height: 216px;
+    margin-bottom: 60px;
     padding: 40px 32px 80px 32px;
     background-image: url(../images/haeder/header-background-1280.jpg);
     background-size: 1280px 216px;
