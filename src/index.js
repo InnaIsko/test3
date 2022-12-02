@@ -4,7 +4,7 @@ import pagination from 'pagination';
 const getRef = selector => document.querySelector(selector);
 const apiKey = '54c00021c1f0a4ca812033181f98909b';
 
-let movieID = '';
+// let movieID = '';
 // let currentPage = 1;
 // let quantityPage = 20;
 
@@ -14,13 +14,13 @@ async function getMovies() {
   );
   console.log(getAxios.data.results);
   renderMarkup(getAxios.data.results);
-  getRef('.movies__link').addEventListener('click', renderMarkupModal);
-  getRef('.modal__button').addEventListener('click', toggleModal);
+  getRef('.movies__list').addEventListener('click', renderMarkupModal);
+  getRef('.modal__button').addEventListener('click', closeModal);
 }
 
 function createMarkup(properties) {
   return `
-     <li class="movies__item">
+     <li class="movies__item" data-id="${properties.id}">
      <a class="movies__link">
         <img class="movies__img" src="${properties.backdrop_path}" alt="" />
         <h3 class="movies__title"">${properties.original_title}</h3>
@@ -40,6 +40,9 @@ function renderMarkup(resp) {
 function clearMarcup() {
   getRef('.movies__list').innerHTML = ' ';
 }
+function clearMarcupModal() {
+  getRef('.modal-wrap').innerHTML = ' ';
+}
 async function getMoviesOnSearch(event) {
   event.preventDefault();
   clearMarcup();
@@ -54,25 +57,48 @@ async function getMoviesOnSearch(event) {
 function toggleModal() {
   getRef('.backdrop').classList.toggle('is-hidden');
 }
-function createMurkupModal(properties) {
-  return `<div class="modal-movie">
-  <img class="modal-movie__img" src="${properties.backdrop_path}" alt="" />
-  <h2 class="modal-movie__title">${properties.original_title}</h2>
-  <p class="modal-movie__text">Vote / Votes<span class="modal-movie__desc">${properties.vote_average}/${properties.vote_count}</span></p>
-  <p class="modal-movie__text">Popularity<span class="modal-movie__desc">${properties.popularity}</span></p>
-  <p class="modal-movie__text">Original Title<span class="modal-movie__desc">${properties.original_title}</span></p>
-  <p class="modal-movie__text">Genre<span class="modal-movie__desc">${properties.genre_ids}</span></p>
+function closeModal() {
+  clearMarcupModal();
+  toggleModal();
+}
+function createMurkupModal({
+  backdrop_path,
+  original_title,
+  vote_average,
+  vote_count,
+  popularity,
+  genres,
+  overview,
+}) {
+  const genresEl = genres.map(el => {
+    return el.name;
+  });
+  return `<div class="modal-wrap"><div class="modal-movie">
+  <img class="modal-movie__img" src="${backdrop_path}" alt="" />
+  <h2 class="modal-movie__title">${original_title}</h2>
+  <p class="modal-movie__text">Vote / Votes<span class="modal-movie__desc"> ${vote_average} / ${vote_count}</span></p>
+  <p class="modal-movie__text">Popularity<span class="modal-movie__desc"> ${popularity}</span></p>
+  <p class="modal-movie__text">Original Title<span class="modal-movie__desc"> ${original_title}</span></p>
+  <p class="modal-movie__text">Genre<span class="modal-movie__desc"> ${genresEl}</span></p>
   <h3 class="modal-movie__caption">About </h3>
-  <p class="modal-movie__lead">${properties.overview}</p>
+  <p class="modal-movie__lead"> ${overview}</p>
 </div>
 <button class="modal-movie__btn">add to Watched</button>
-<button class="modal-movie__btn">add to queue</button>`;
+<button class="modal-movie__btn">add to queue</button> </div>`;
 }
-function renderMarkupModal(element) {
+async function renderMarkupModal(e) {
   toggleModal();
-  const markup = createMurkupModal(element);
+
+  let movieID = await e.target.parentElement.parentElement.dataset.id;
+
+  const getAxios = await axios.get(
+    `https://api.themoviedb.org/3/movie/${movieID}?api_key=${apiKey}&language=en-US&append_to_response=credits`
+  );
+  console.log(getAxios);
+  const markup = createMurkupModal(getAxios.data);
   getRef('.modal').insertAdjacentHTML('beforeend', markup);
 }
+
 getRef('.search').addEventListener('submit', getMoviesOnSearch);
 
 getMovies();
