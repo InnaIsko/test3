@@ -54,6 +54,15 @@
 }
 
 .modal-movie {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: $middle-width) and (max-width: 1279px) {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 264px;
+    height: 300px;
+  }
   &__desc {
     font-size: 12px;
     font-weight: $font-weight-primary;

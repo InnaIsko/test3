@@ -1,11 +1,10 @@
 import axios from 'axios';
-import firebase from 'firebase/firebase-node';
-import pagination from 'pagination';
+import * as basicLightbox from 'basiclightbox';
 
 const getRef = selector => document.querySelector(selector);
 const apiKey = '54c00021c1f0a4ca812033181f98909b';
 
-// let movieID = '';
+let movieID = '';
 // let currentPage = 1;
 // let quantityPage = 20;
 
@@ -13,7 +12,7 @@ async function getMovies() {
   const getAxios = await axios.get(
     `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`
   );
-  console.log(getAxios.data.results);
+  console.log(getAxios);
   renderMarkup(getAxios.data.results);
   getRef('.movies__list').addEventListener('click', renderMarkupModal);
   getRef('.modal__button').addEventListener('click', closeModal);
@@ -77,14 +76,16 @@ function createMurkupModal({
   });
   window.addEventListener('keydown', onEscClose);
   return `<div class="modal-wrap"><div class="modal-movie">
-  <img class="modal-movie__img" src="https://image.tmdb.org/t/p/w500${backdrop_path}" alt="" />
-  <h2 class="modal-movie__title">${original_title}</h2>
+ <img class="modal-movie__img" src="https://image.tmdb.org/t/p/w500${backdrop_path}" alt="" /> 
+  <div class="modal-movie__info"> 
+ <h2 class="modal-movie__title">${original_title}</h2>
   <p class="modal-movie__text">Vote / Votes<span class="modal-movie__desc"> ${vote_average} / ${vote_count}</span></p>
   <p class="modal-movie__text">Popularity<span class="modal-movie__desc"> ${popularity}</span></p>
   <p class="modal-movie__text">Original Title<span class="modal-movie__desc"> ${original_title}</span></p>
   <p class="modal-movie__text">Genre<span class="modal-movie__desc"> ${genresEl}</span></p>
   <h3 class="modal-movie__caption">About </h3>
   <p class="modal-movie__lead"> ${overview}</p>
+  </div>
 </div>
 <button class="modal-movie__btn">add to Watched</button>
 <button class="modal-movie__btn">add to queue</button> </div>`;
@@ -92,14 +93,15 @@ function createMurkupModal({
 async function renderMarkupModal(e) {
   toggleModal();
 
-  let movieID = await e.target.parentElement.parentElement.dataset.id;
+  movieID = await e.target.parentElement.parentElement.dataset.id;
 
   const getAxios = await axios.get(
     `https://api.themoviedb.org/3/movie/${movieID}?api_key=${apiKey}&language=en-US&append_to_response=credits`
   );
-  console.log(getAxios);
+
   const markup = createMurkupModal(getAxios.data);
   getRef('.modal').insertAdjacentHTML('beforeend', markup);
+  await getRef('.modal-movie__btn').addEventListener('click', trailer);
 }
 function onEscClose(event) {
   if (event.key === 'Escape') {
@@ -118,4 +120,26 @@ getRef('.backdrop').addEventListener('click', onClickClose);
 getRef('.search').addEventListener('submit', getMoviesOnSearch);
 
 getMovies();
-console.log(firebase);
+
+function trailer() {
+  let idYoutub = '';
+  const getAxios = axios.get(
+    `https://api.themoviedb.org/3/movie/${movieID}/videos?api_key=${apiKey}&language=en-US`
+  );
+  getAxios.then(resp => {
+    idYoutub = resp.data.results[0].key;
+    console.log(idYoutub);
+  });
+
+  const instance = basicLightbox.create(`
+<iframe
+  src="https://www.youtube.com/embed/${idYoutub}"
+  width="560" 
+  height="315"
+  rameborder="0"
+  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+  allowfullscreen
+></iframe>
+`);
+  instance.show(() => console.log('lightbox now visible'));
+}
