@@ -41,7 +41,7 @@ function clearMarcup() {
   getRef('.movies__list').innerHTML = ' ';
 }
 function clearMarcupModal() {
-  getRef('.modal-wrap').remove();
+  getRef('.modal-movie').remove();
 }
 async function getMoviesOnSearch(event) {
   event.preventDefault();
@@ -75,7 +75,7 @@ function createMurkupModal({
     return el.name;
   });
   window.addEventListener('keydown', onEscClose);
-  return `<div class="modal-wrap"><div class="modal-movie">
+  return `<div class="modal-movie">
  <img class="modal-movie__img" src="https://image.tmdb.org/t/p/w500${backdrop_path}" alt="" /> 
   <div class="modal-movie__info"> 
  <h2 class="modal-movie__title">${original_title}</h2>
@@ -87,8 +87,7 @@ function createMurkupModal({
   <p class="modal-movie__lead"> ${overview}</p>
   </div>
 </div>
-<button class="modal-movie__btn">add to Watched</button>
-<button class="modal-movie__btn">add to queue</button> </div>`;
+`;
 }
 async function renderMarkupModal(e) {
   toggleModal();
@@ -100,8 +99,8 @@ async function renderMarkupModal(e) {
   );
 
   const markup = createMurkupModal(getAxios.data);
-  getRef('.modal').insertAdjacentHTML('beforeend', markup);
-  await getRef('.modal-movie__btn').addEventListener('click', trailer);
+  getRef('.modal-wrap').insertAdjacentHTML('beforeend', markup);
+  await getRef('.modal-movie__btn').addEventListener('click', getTrailer);
 }
 function onEscClose(event) {
   if (event.key === 'Escape') {
@@ -121,7 +120,7 @@ getRef('.search').addEventListener('submit', getMoviesOnSearch);
 
 getMovies();
 
-function trailer() {
+function getTrailer() {
   let idYoutub = '';
   const getAxios = axios.get(
     `https://api.themoviedb.org/3/movie/${movieID}/videos?api_key=${apiKey}&language=en-US`
@@ -132,14 +131,8 @@ function trailer() {
   });
 
   const instance = basicLightbox.create(`
-<iframe
-  src="https://www.youtube.com/embed/${idYoutub}"
-  width="560" 
-  height="315"
-  rameborder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-  allowfullscreen
-></iframe>
+    <iframe class="trailerPlayer" src="https://www.youtube.com/embed/${idYoutub}" width="1200" height="800" frameborder="0"></iframe>
 `);
-  instance.show(() => console.log('lightbox now visible'));
+
+  instance.show();
 }
