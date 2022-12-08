@@ -5,6 +5,7 @@ const getRef = selector => document.querySelector(selector);
 const apiKey = '54c00021c1f0a4ca812033181f98909b';
 
 let movieID = '';
+let instance;
 
 async function getMovies() {
   const getAxios = await axios.get(
@@ -141,6 +142,7 @@ async function renderMarkupModal(e) {
 }
 function onEscClose(event) {
   if (event.key === 'Escape') {
+    instance.close();
     closeModal();
   }
 }
@@ -162,14 +164,19 @@ async function getTrailer() {
   const getAxios = axios.get(
     `https://api.themoviedb.org/3/movie/${movieID}/videos?api_key=${apiKey}&language=en-US`
   );
-  await getAxios.then(resp => {
-    idYoutub = resp.data.results[0].key;
-    console.log(idYoutub);
-  });
+  await getAxios
+    .then(resp => {
+      idYoutub = resp.data.results[0].key;
+      instance = basicLightbox.create(
+        `
+    <iframe class="trailerPlayer" src="https://www.youtube.com/embed/${idYoutub}" width="1200" height="700" frameborder="0"></iframe>
+   `
+      );
 
-  const instance = basicLightbox.create(`
-    <iframe class="trailerPlayer" src="https://www.youtube.com/embed/${idYoutub}" width="500" height="300" frameborder="0"></iframe>
-`);
-
-  instance.show();
+      instance.show();
+    })
+    .catch(error => {
+      getRef('.btn-play').setAttribute('disabled', 'disabled');
+      getRef('.btn-play').textContent = 'trailer is missing';
+    });
 }
